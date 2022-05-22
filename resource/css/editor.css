@@ -1,0 +1,64 @@
+/* table 样式 */
+table {
+  border-top: 1px solid #ccc;
+  border-left: 1px solid #ccc;
+}
+table td,
+table th {
+  border-bottom: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+  padding: 3px 5px;
+}
+table th {
+  border-bottom: 2px solid #ccc;
+  text-align: center;
+}
+
+/* blockquote 样式 */
+blockquote {
+  display: block;
+  border-left: 8px solid #d0e5f2;
+  padding: 5px 10px;
+  margin: 10px 0;
+  line-height: 1.4;
+  font-size: 100%;
+  background-color: #f1f1f1;
+}
+/* ul ol 样式 */
+ul, ol {
+  margin: 10px 0 10px 20px;
+}
+
+/*加了样式好像没什么用*/
+pre{
+    position: relative;
+    overflow-wrap: break-word;
+    background-color: #f8f9fa!important;
+    word-wrap: break-word;
+    table-layout: fixed;
+    width: 100%;
+    white-space: pre-wrap;
+}
+pre:before{
+    display: block;
+    content: "";
+    height: 32px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin-bottom: 20px;
+    padding: 0 10px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    text-align: center;
+}
+
+pre>code{
+    overflow-y: hidden;
+    /*overflow-x: scroll;*/
+    overflow-wrap: break-word;
+}
+
+
+
