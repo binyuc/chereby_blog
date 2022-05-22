@@ -94,40 +94,41 @@ def before():
 
 
 # # TODO 这里部署前也需要修改
-# from controller.article import *
-# app.register_blueprint(article)
-# from controller.index import *
-# app.register_blueprint(index)
-# from controller.editor import *
-# app.register_blueprint(editor)
-# from controller.user import *
-# app.register_blueprint(user)
-# from controller.comment import *
-# app.register_blueprint(comment)
-# from controller.editor import *
-# app.register_blueprint(editor)
-# from controller.fun import *
-# app.register_blueprint(fun)
+from controller.article import *
+app.register_blueprint(article)
+from controller.index import *
+app.register_blueprint(index)
+from controller.editor import *
+app.register_blueprint(editor)
+from controller.user import *
+app.register_blueprint(user)
+from controller.comment import *
+app.register_blueprint(comment)
+from controller.editor import *
+app.register_blueprint(editor)
+from controller.fun import *
+app.register_blueprint(fun)
+from controller.poker import *
+app.register_blueprint(poker)
 
 
-
-if __name__ == '__main__':
-    from controller.article import *
-    app.register_blueprint(article)
-    from controller.index import *
-    app.register_blueprint(index)
-    from controller.editor import *
-    app.register_blueprint(editor)
-    from controller.user import *
-    app.register_blueprint(user)
-    from controller.comment import *
-    app.register_blueprint(comment)
-    from controller.editor import *
-    app.register_blueprint(editor)
-    from controller.fun import *
-    app.register_blueprint(fun)
-    from controller.poker import *
-    app.register_blueprint(poker)
-    app.run(debug=True, host="127.0.0.1", port=5001)
+# if __name__ == '__main__':
+#     from controller.article import *
+#     app.register_blueprint(article)
+#     from controller.index import *
+#     app.register_blueprint(index)
+#     from controller.editor import *
+#     app.register_blueprint(editor)
+#     from controller.user import *
+#     app.register_blueprint(user)
+#     from controller.comment import *
+#     app.register_blueprint(comment)
+#     from controller.editor import *
+#     app.register_blueprint(editor)
+#     from controller.fun import *
+#     app.register_blueprint(fun)
+#     from controller.poker import *
+#     app.register_blueprint(poker)
+#     app.run(debug=True, host="127.0.0.1", port=5001)
 
 

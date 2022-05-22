@@ -70,8 +70,9 @@ def upload_img():
             "data": []
         }
         # TODO 记得切换生产地址
-        base_path = '/root/blogin/blog/resource/pic/article/87'
+        # base_path = '/root/blogin/blog/resource/pic/article/87'
         # base_path = r'D:\Jupyter\爬虫\blog\resource\pic\article\87'
+        base_path = '/root/chereby_blog/resource/pic/article/87'
         for k, v in fobject.items():
             print(k, v)
             file_name = k

@@ -2,7 +2,7 @@ function poker_check_valid_color() {
     var card_color_flop1 = document.getElementById('card_color_flop1');
     var card_color_flop2 = document.getElementById('card_color_flop2');
     var card_color_flop3 = document.getElementById('card_color_flop3');
-
+    set_progress_rate(0, 100);
     if (card_color_flop1.value == 'none') {
         $("#card_color_flop1").css("border", "red 1px solid");
         return false;
@@ -29,7 +29,7 @@ function poker_check_valid_color() {
 function set_progress_rate(n, total) {
     //设置进度
     rate = (n / total * 100).toFixed(2)
-    if (n > 0) {
+    if (n >= 0) {
         $(".progress-bar").attr("aria-valuenow", n);
         $(".progress-bar").attr("aria-valuemax", total);
         $(".progress-bar").text(rate + "%");
@@ -38,7 +38,7 @@ function set_progress_rate(n, total) {
 }
 
 function analyze_card() {
-
+    set_progress_rate(0, 100);
     var canclick = true
     $('#poker_button').attr('disabled', canclick);
     var my_card1 = $.trim($("#card_num_my_hand1").val()) + $.trim($("#card_color_my_hand1").val());
@@ -77,7 +77,7 @@ function analyze_card() {
     // }, 1000);
 
     $.post('/poker-run', param, function (data) {
-            set_progress_rate(0, 100);
+
             console.log(data)
             if (data == 'request form get error') {
                 alert("解析参数失败")

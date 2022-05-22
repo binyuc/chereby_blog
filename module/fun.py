@@ -5,7 +5,8 @@ import xgboost as xgb
 
 # TODO 部署前需要改
 # root_path = 'D:/Jupyter/爬虫/blog/resource/model/'
-root_path = '/root/blogin/blog/resource/model/'
+# root_path = '/root/blogin/blog/resource/model/'
+root_path = '/root/chereby_blog/resource/model'
 
 class Fun():
 

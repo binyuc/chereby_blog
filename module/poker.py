@@ -75,7 +75,7 @@ class Poker:
         if (None, None) in hands_list_tuple:
 
             unknown_index = hands_list_tuple.index((None, None))
-            # todo 这一部是为对方构建底牌，把每个底牌轮进去算
+            #  这一部是为对方构建底牌，把每个底牌轮进去算
 
             for filler_hole_cards in itertools.combinations(self.full_cards_list, 2):
                 hands_list_tuple[unknown_index] = filler_hole_cards
@@ -84,7 +84,7 @@ class Poker:
                 deck_list.remove(filler_hole_cards[0])
                 deck_list.remove(filler_hole_cards[1])
 
-                # todo 现在迭代一次是0.02s，标准为0.008，一半
+                #  现在迭代一次是0.02s，标准为0.008，一半
                 self.find_winner(hands_list_tuple, board_length, deck_list, open_board_deck, self.tie_win_lose_list,
                                  self.card_type_result_histograms)
 
@@ -119,7 +119,7 @@ class Poker:
         if (None, None) in hands_list_tuple:
 
             unknown_index = hands_list_tuple.index((None, None))
-            # todo 这一部是为对方构建底牌，把每个底牌轮进去算
+            #  这一部是为对方构建底牌，把每个底牌轮进去算
             pool = Pool(8)
             final = []
 
