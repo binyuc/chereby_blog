@@ -1,0 +1,291 @@
+<!--将当前页面继承到block位置-->
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="blog-post-title text-center">二手房分析预测和可视化项目</div>
+<p class="blog-post-meta text-center">2021-06-13 16:12:35 by <a href="#">Binyu</a></p>
+<div class="text-center" style="font-size: 20px">模型预测部分，请点击
+    <text class="quick-t" id="scroll">这</text>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#scroll").click(function () {
+            $('html, body').animate({
+                scrollTop: $("#model").offset().top
+            }, 1000);
+        });
+    });
+</script>
+<style type="text/css">
+    .quick-t {
+        cursor: pointer;
+        color: #583e1d;
+    }
+</style>
+<div align="center">
+    <div class='tableauPlaceholder' id='viz1623804199130' style='position: relative'>
+        <noscript><a href='#'><img alt='总 '
+                                   src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;an&#47;anjuke_analysis&#47;sheet5&#47;1_rss.png'
+                                   style='border: none'/></a></noscript>
+        <object class='tableauViz' style='display:none;'>
+            <param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F'/>
+            <param name='embed_code_version' value='3'/>
+            <param name='site_root' value=''/>
+            <param name='name' value='anjuke_analysis&#47;sheet5'/>
+            <param name='tabs' value='no'/>
+            <param name='toolbar' value='yes'/>
+            <param name='static_image'
+                   value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;an&#47;anjuke_analysis&#47;sheet5&#47;1.png'/>
+            <param name='animate_transition' value='yes'/>
+            <param name='display_static_image' value='yes'/>
+            <param name='display_spinner' value='yes'/>
+            <param name='display_overlay' value='yes'/>
+            <param name='display_count' value='yes'/>
+            <param name='language' value='zh-CN'/>
+        </object>
+    </div>
+    <script type='text/javascript'>                    var divElement = document.getElementById('viz1623804199130');
+    var vizElement = divElement.getElementsByTagName('object')[0];
+    if (divElement.offsetWidth > 800) {
+        vizElement.style.width = '1000px';
+        vizElement.style.height = '1727px';
+    } else if (divElement.offsetWidth > 500) {
+        vizElement.style.width = '1000px';
+        vizElement.style.height = '1727px';
+    } else {
+        vizElement.style.width = '100%';
+        vizElement.style.height = '2377px';
+    }
+    var scriptElement = document.createElement('script');
+    scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';
+    vizElement.parentNode.insertBefore(scriptElement, vizElement);                </script>
+</div>
+<style>
+    .model-container {
+        max-width: 960px;
+        border: 1px solid #D8D8D8;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+</style>
+<script src="/js/validate_anjuke.js"></script>
+<div class="container model-container" id="model">
+    <main>
+        <!--        模型介绍-->
+        <div class="py-5 text-center">
+            <img class="d-block mx-auto mb-4" src="/pic/xgboost.png" alt="" width="216"
+                 height="171" style="margin-bottom: 0 !important;">
+            <h2 class="text-center">上海二手房房价预测模型</h2>
+            <p class="lead">该模型基于Decision Tree，Adaboost Tree, Random Forest 和Xgboost构建模型，最终采取表现更好的XGboost
+                模型，MAE为42.012</p>
+            <p class="lead" style="font-size: 14px">(模型的训练数据在2021年6月15日爬取，暂无更新，
+                同时由于小区数量特别多，则没有加入该维度进行训练，预测结果仅供参考)</p>
+        </div>
+        <div class="row g-5">
+            <!--            模型预测结果板块-->
+            <div class="col-md-5 col-lg-4 order-md-last">
+                <h4 class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="text-primary">你的房子的预估结果</span>
+                </h4>
+                <ul class="list-group mb-3" style="margin: 10px 0  !important;">
+                    <li class="list-group-item d-flex justify-content-between lh-sm">
+                        <div>
+                            <h6 class="my-0">Estate Name</h6>
+                            <small class="text-muted" id="res_estate">尚未选择小区</small>
+                        </div>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between lh-sm">
+                        <div>
+                            <h6 class="my-0">Area</h6>
+                            <small class="text-muted" id="res_area">尚未选择面积</small>
+                        </div>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between lh-sm">
+                        <div>
+                            <h6 class="my-0">Floor</h6>
+                            <small class="text-muted" id="res_floor">X层</small>
+                        </div>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between lh-sm">
+                        <div>
+                            <h6 class="my-0">Room Info</h6>
+                            <small class="text-muted" id="res_room">X室X厅X卫</small>
+                        </div>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between lh-sm">
+                        <div>
+                            <h6 class="my-0">Direction</h6>
+                            <small class="text-muted" id="res_direction">南北</small>
+                        </div>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between lh-sm">
+                        <div>
+                            <h6 class="my-0">Location</h6>
+                            <small class="text-muted" id="res_place">浦东-陆家嘴</small>
+                        </div>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between lh-sm">
+                        <div>
+                            <h6 class="my-0">Built Year</h6>
+                            <small class="text-muted" id="res_built_year">2000</small>
+                        </div>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span class="text-success">房子总价 (万元)</span>
+                        <strong class="text-success" id="res_model">￥100</strong>
+                    </li>
+                </ul>
+            </div>
+            <!--            模型参数输入板块-->
+            <div class="col-md-7 col-lg-8">
+                <h4 class="mb-3">看看你的房子值多少钱</h4>
+                <form class="needs-validation" novalidate>
+                    <div class="row g-3">
+                        <div class="col-sm-12">
+                            <label for="estate" class="form-label">小区名<span
+                                    class="text-muted">(Optional)</span></label>
+                            <input type="text" class="form-control" id="estate" placeholder="xxxx小区"
+                                   onBlur="check_estate()" oninput="check_estate()" value="我的房子">
+                        </div>
+                        <div class="col-sm-12">
+                            <label for="area" class="form-label">面积<span
+                                    class="text-muted">(必填 整数数字)</span></label>
+                            <input type="text" class="form-control" id="area" placeholder="如：76"
+                                   onBlur="check_area()" oninput="check_area()" value=200>
+                        </div>
+                        <!--                        房屋楼层-->
+                        <div class="col-sm-12">
+                            <label for="floor" class="form-label">楼层</label>
+                            <select class="form-select" id="floor" onBlur="check_floor()" oninput="check_floor()">
+                                <option value="none">Choose...</option>
+                                <option selected>高层</option>
+                                <option>中层</option>
+                                <option>低层</option>
+                                <option>地下</option>
+                            </select>
+                        </div>
+                        <!--                        卧室-->
+                        <div class="col-md-4">
+                            <label for="bedroom" class="form-label">卧室</label>
+                            <select class="form-select" id="bedroom" onBlur="check_bedroom()" oninput="check_bedroom()">
+                                <option value="none">Choose...</option>
+                                <option>1</option>
+                                <option selected>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                                <option>6</option>
+                                <option>8</option>
+                                <option>9</option>
+                            </select>
+
+                        </div>
+                        <!--客厅-->
+                        <div class="col-md-4">
+                            <label for="living_room" class="form-label">客厅</label>
+                            <select class="form-select" id="living_room" onBlur="check_livingroom()"
+                                    oninput="check_livingroom()">
+                                <option value="none">Choose...</option>
+                                <option>1</option>
+                                <option selected>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                                <option>6</option>
+                                <option>8</option>
+                                <option>9</option>
+                            </select>
+
+                        </div>
+                        <!--卫生间-->
+                        <div class="col-md-4">
+                            <label for="bathroom" class="form-label">卫生间</label>
+                            <select class="form-select" id="bathroom" onBlur="check_bathroom()"
+                                    oninput="check_bathroom()">
+                                <option value="none">Choose...</option>
+                                <option selected>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
+                                <option>6</option>
+                                <option>8</option>
+                                <option>9</option>
+                            </select>
+                        </div>
+                        <!--朝向-->
+                        <div class="col-sm-12">
+                            <label for="direction" class="form-label">朝向</label>
+                            <select class="form-select" id="direction" onBlur="check_direction()"
+                                    oninput="check_direction()">
+                                <option value="none">Choose...</option>
+                                <option selected>南</option>
+                                <option>东</option>
+                                <option>西</option>
+                                <option>北</option>
+                                <option>东南</option>
+                                <option>东北</option>
+                                <option>东西</option>
+                                <option>南北</option>
+                                <option>西南</option>
+                                <option>西北</option>
+                            </select>
+                        </div>
+                        <!--地区-->
+                        <div class="col-md-6">
+                            <label for="district" class="form-label">地区</label>
+                            <select class="form-select" id="district" onBlur="check_district()"
+                                    oninput="check_district()" onchange="update_neighborhood()">
+                                <option value="none">Choose...</option>
+                                {% for loc in shanghai_list%}
+                                {%for district in loc.keys()%}
+                                <option>{{district}}</option>
+                                {% endfor %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <!--                        社区-->
+                        <div class="col-md-6">
+                            <label for="neighborhood" class="form-label">社区</label>
+                            <select class="form-select" id="neighborhood" onBlur="check_neighborhood()"
+                                    oninput="check_neighborhood()">
+                            </select>
+                        </div>
+                        <!--                        建造年份-->
+                        <div class="col-sm-12">
+                            <label for="built_year" class="form-label">建造年份<span
+                                    class="text-muted">(必填 整数数字)</span></label>
+                            <input type="text" class="form-control" id="built_year" placeholder="如：2015" value=2015
+                                   onBlur="check_built_year()"
+                                   oninput="check_built_year()">
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="same-address">
+                        <label class="form-check-label" for="same-address">标签1</label>
+                    </div>
+
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="save-info">
+                        <label class="form-check-label" for="save-info">标签2</label>
+                    </div>
+
+                    <hr class="my-4">
+
+
+                    <button class="w-100 btn btn-primary btn-lg" type="button" onclick="post_model()">模型预测</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+</div>
+
+
+{% endblock %}

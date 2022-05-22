@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1 style="text-align: center ; ">文章发布界面</h1>
+<div class="form-group">
+    <label for="headline">文章标题</label>
+    <input type="headline" class="form-control" id="headline" placeholder="这里输入文章的标题">
+</div>
+<div class="form-group">
+    <label for="type">选择文章主类</label>
+    <select class="form-control" id="type">
+        <option value=1>数据分析</option>
+        <option value=2>机器学习</option>
+        <option value=3>应用及部署</option>
+        <option value=4>行业见解</option>
+        <option value=5>网络爬虫</option>
+        <option value=6>心得备忘录</option>
+        <option value=7>小工具</option>
+    </select>
+</div>
+<div class="form-group row">
+    <div class="col-6">
+        <label for="subtype">文章子类</label>
+        <input class="form-control" id="subtype" placeholder="这里输入文章的子类">
+    </div>
+    <div class="col-6">
+        <label for="articletag">文章标签</label>
+        <input class="form-control " id="articletag" placeholder="文章展示的标签">
+    </div>
+</div>
+
+<div>
+    <div id="toolbar-container" class="toolbar"></div>
+    <p></p>
+    <div id="text-container" class="text"></div>
+</div>
+<div style="padding-top: 10px ; padding-bottom: 10px;" align="center">
+    <button class="btn btn-outline-primary " onclick="post_blog()">发送文章</button>
+    <button class="btn btn-outline-secondary " onclick="save_blog()">保存文章</button>
+</div>
+<!-- 引入 wangEditor.min.js -->
+<style>
+    .toolbar {
+        border: 1px solid #ccc;
+        position: -webkit-sticky;
+        position: sticky;
+        top: 0;
+        z-index: 999999;
+    }
+
+    .text {
+        border: 1px solid #ccc;
+        min-height: 300px;
+        height: 500px;
+    }
+</style>
+<script type="text/javascript">
+    var ARTICLEID = 0; //定义全局变量用于保存articleid
+    //
+
+    const E = window.wangEditor;
+    const editor = new E("#toolbar-container", "#text-container");
+    editor.config.uploadImgServer = '/upload-img'
+    editor.create();
+    editor.highlight = hljs
+
+
+    function post_blog() {
+        var content = editor.txt.html();
+        console.log('aaa', content)
+        var arrEntities = {'lt': '<', 'gt': '>', 'nbsp': ' ', 'amp': '&', 'quot': '"'};
+        // var result = content.replace(/&lt;/i, "<").replace(/&gt;/i, ">").replace(/&nbsp;/i,"")
+        var result = content.replace(/&(lt|gt|nbsp|amp|quot);/ig, function (all, t) {
+            return arrEntities[t];
+        });
+        var headline = $.trim($("#headline").val());
+        var type = ($("#type").val());
+        var subtype = $.trim($("#subtype").val());
+        var articletag = $.trim($("#articletag").val());
+        var param = 'content=' + window.encodeURIComponent(result)
+            + '&headline=' + headline
+            + '&type=' + type
+            + '&subtype=' + subtype
+            + '&articletag=' + articletag
+            + '&drafted=0'
+            + '&checked=1'
+            + '&articleid=' + ARTICLEID;
+        console.log(param)
+        $.post('/editor-post', param, function (data) {
+            console.log(data)
+            if (data == 'content-invalid') {
+                alert("评论内容不合法.");
+            } else if (data == 'add-limit') {
+                alert("你当天已经用完5条评论的限额.");
+            } else if (data.match(/^\d+$/)) {
+                alert("你已成功发布.");
+                setTimeout(function () {
+                    location.href = '/article/articleid=' + data;
+                }, 1000);
+            } else if (data == 'perm-denied') {
+                alert("请先登陆")
+            }
+            //这里还需要优化
+            else if (data == 'not-login') {
+                alert("你还没有登录，不能发表评论.");
+            } else {
+                alert("发表评论出错，请联系管理员." + data);
+            }
+        });
+    }
+
+    function save_blog() {
+        var content = editor.txt.html();
+        var headline = $.trim($("#headline").val());
+        var type = ($("#type").val());
+        var subtype = $.trim($("#subtype").val());
+        var articletag = $.trim($("#articletag").val());
+        var param = 'content=' + content
+            + '&headline=' + headline
+            + '&type=' + type
+            + '&subtype=' + subtype
+            + '&articletag=' + articletag
+            + '&drafted=1'
+            + '&checked=1'
+            + '&articleid=' + ARTICLEID;
+        console.log(param)
+        $.post('/editor-post', param, function (data) {
+            console.log(data)
+            if (data == 'content-invalid') {
+                alert("评论内容不合法.");
+            } else if (data == 'add-limit') {
+                alert("你当天已经用完5条评论的限额.");
+            } else if (data.match(/^\d+$/)) {
+                alert("你已成功保存草稿.");
+                ARTICLEID = parseInt(data)
+                // location.reload();
+            } else if (data == 'perm-denied') {
+                alert("请先登陆")
+            }
+            //这里还需要优化
+            else if (data == 'not-login') {
+                alert("你还没有登录，不能发表评论.");
+            } else {
+                alert("发表评论出错，请联系管理员.");
+            }
+        });
+    }
+
+
+</script>
+
+{% endblock %}

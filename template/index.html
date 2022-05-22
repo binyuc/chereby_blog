@@ -1,0 +1,208 @@
+<!--将当前页面继承到block位置-->
+{% extends 'base.html' %}
+{% block content %}
+<div class="row">
+    <div class="col-12 text-center blog-header row">
+        <h2 style="text-align: left">文章列表
+            <a href="/"><span class="button-info badge badge-info"
+                              style="font-size:5px ; padding-left: 5px; padding-right:5px">最新</span></a>
+            <a href="/popular"><span class="button-warning badge badge-warning"
+                                     style="font-size:5px ; padding-left: 5px ; padding-right:5px">最火</span></a>
+        </h2>
+    </div>
+</div>
+<div class="row" style="padding-top: 15px;">
+    <script>
+        AOS.init();
+    </script>
+    <!-- /.博客主体 -->
+    <div class="col-md-9 blog-main">
+        <!--推荐卡区域-->
+        <div class="row mb-2">
+            <!--    卡片开始-->
+            {% for article in result %}
+            <div class="blog-card-div col-md-6">
+                <!-- 把h-md-250 这个属性去掉了-->
+                <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm position-relative">
+                    <div class="col p-4 d-flex flex-column position-relative">
+                        <div style="padding: 5px 5px ">
+                            <strong class="badge badge-info">{{article_type[article.type | string]}}</strong>
+                            <strong class="badge badge-primary">{{article.subtype | string}}</strong>
+                            {% if article.tag %}
+                            <strong class="badge badge-dark">{{article.tag | string}}</strong>
+                            {% endif %}
+                        </div>
+                        <div>
+                            <h3 class="mb-0" style="font-size: 20px"><a class="a-tag "
+                                                                        href="/article/articleid={{article.articleid}}"
+                                                                        style="text-decoration:none;">{{article.headline
+                                | mytruncate(17)}}</a></h3>
+                            {% if article.desc %}
+                            <p class="mb-0 text-muted" style="font-size: 15px">{{article.desc}}</p>
+                            {% else %}
+                            <p class="mb-0 text-muted" style="font-size: 15px">{{article.content | striptags |
+                                mytruncate(20)}}</p>
+
+                            {% endif %}
+                            <!--                            <a href="/article/articleid={{article.articleid}}" class="stretched-link"></a>-->
+                        </div>
+                        <div class="row d-flex">
+
+                            <div class="col-12 mb-1 text-muted" style=" text-align:right; padding-top: 5px">
+                                <i class="bi bi-chat-square-text" style="padding-right: 5px; padding-top: 5px">
+                                    <span style="padding-left: 3px">{{article.replycount}}</span></i>
+                                <i class="bi bi-thermometer-half" style="padding-right: 5px; padding-top: 5px"><span
+                                        style="padding-left: 3px">{{article.readcount}}</span></i>
+
+                                <i class="bi bi-heart" style="padding-right: 5px; padding-top: 5px"><span
+                                        style="padding-left: 3px">{{article.likecount}}</span></i>
+                            </div>
+                            <div class="mb-1 text-muted"
+                                 style=" font-size:15px; align-content: center; text-align:right; padding-top: 5px">
+                                {{article.createtime}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="container" style="padding-bottom: 10px ; padding-top: 10px" id="custom-cards">
+            <h2 class="pb-2 border-bottom">个人项目</h2>
+            <div class="row">
+                <div class="col-12 pic-card">
+                    <div><a href="/anjuke" class="stretched-link"></a></div>
+                    <div class="card project-card"
+                         style="background-image: url('/pic/bg14.png')">
+                        <div class="d-flex flex-column h-100 p-5 pb-3 text-white">
+                            <h2 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">上海二手房预测项目</h2>
+                            <ul class="d-flex list-unstyled mt-auto">
+                                <li class="d-flex align-items-center me-3">
+                                    <small>2021年6月3日</small>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 pic-card">
+                    <div><a href="http://cov.chereby.com/cov" class="stretched-link"></a></div>
+                    <div class="card project-card"
+                         style="background-image: url('/pic/bg13.png')">
+                        <div class="d-flex flex-column h-100 p-5 pb-3 text-white ">
+                            <h2 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">中国疫情可视化大屏</h2>
+                            <ul class="d-flex list-unstyled mt-auto">
+                                <li class="d-flex align-items-center me-3">
+                                    <small>2021年5月15日</small>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 pic-card">
+                    <div><a href="/poker" class="stretched-link"></a></div>
+                    <div class="card project-card"
+                         style="background-image: url('/pic/bg10.png')">
+                        <div class="d-flex flex-column h-100 p-5 pb-3 text-white ">
+                            <h2 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">德州扑克胜率计算器</h2>
+                            <ul class="d-flex list-unstyled mt-auto">
+                                <li class="d-flex align-items-center me-3">
+                                    <small>2022年5月15日</small>
+                            </ul>
+                            <a></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- /.博客边框 -->
+    <aside class="col-md-3 blog-sidebar">
+        <div class="p-4 mb-3 bg-light rounded">
+            <div class="row"><h4 class="col-6 font-italic">关于我</h4>
+                <a type="button" class="btn light-btn col-6" href="https://github.com/binyuc">
+                    <i class="bi bi-github">
+                    </i>Github</a></div>
+
+
+            <p class="mb-0">在职数据分析师</br>一个不会写BUG的铲屎官，不是一个好吉他手</br>
+            </p>
+        </div>
+
+        <div class="sticky-top p-4 mb-3  bg-light rounded">
+            <h4 class="font-italic">文章分类</h4>
+            <ul class="list-unstyled ps-0">
+                {%for cat in type_count%}
+                {% for k, v in article_type.items()%}
+                {% if cat[0] == k| int %}
+                <li class="mb-1">
+                    <button class="btn btn-toggle align-items-center rounded" data-bs-toggle="collapse"
+                            data-bs-target="#{{v}}" aria-expanded="true"><a href="/article_list/type={{k}}&page=1"></a>
+                        {{v}}
+                    </button>
+                    <a href="/article_list/type={{k}}&page=1"><span
+                            class="badge badge-success badge-pill ">{{cat[1]}}</span></a>
+                    <div class="collapse" id="{{v}}">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            {%for type,subtype in subtype_count.items()%}
+                            {% if type == cat[0] | string %}
+                            {%for sub in subtype %}
+                            {%for ik,iv in sub.items() %}
+                            <li>
+                                <a href="/article_list/type={{k}}&page=1&subtype={{ik}}" class="link-dark rounded">{{ik}}</a>
+                                <span class="badge badge-success badge-pill">{{iv}}</span>
+                                {% endfor %}
+                                {%endfor %}
+                                {% endif %}
+                                {% endfor %}
+                            </li>
+                        </ul>
+                    </div>
+                    {% endif%}
+                    {% endfor %}
+                    {% endfor %}
+                </li>
+
+                <li class="border-top my-3"></li>
+                <li class="mb-1">
+                    <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
+                            data-bs-target="#account-collapse" aria-expanded="false">
+                        有趣的东西
+                    </button>
+                    <div class="collapse show" id="account-collapse">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li><a href="http://cov.chereby.com/cov" class="link-dark rounded">疫情大屏监控</a></li>
+                            <li><a href="/anjuke" class="link-dark rounded">上海二手房预测模型与可视化</a></li>
+                            <li><a href="/admin" class="link-dark rounded">后台管理</a></li>
+                            <li><a href="#" class="link-dark rounded">Sign out</a></li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+
+    </aside>
+
+</div>
+{% endblock %}
+<div class="p-4 mb-3 bg-light rounded ">
+    <h4 class="font-italic ">文章分类</h4>
+    <ul class="list-group ">
+        {%for cat in type_count%}
+        {% for k, v in article_type.items()%}
+        {% if cat[0] == k| int %}
+        <ul>
+            <li class="d-flex">
+                <a href="/article_list/type={{k}}&page=1">{{v}}</a>
+                <a href="/article_list/type={{k}}&page=1">
+                    <span class="badge badge-primary badge-pill">{{cat[1]}}</span>
+                </a>
+            </li>
+        </ul>
+        {% endif%}
+        {% endfor %}
+        {% endfor %}
+    </ul>
+</div>

@@ -1,0 +1,170 @@
+<!--将当前页面继承到block位置-->
+{% extends 'article_base.html' %}
+{% block article %}
+<style>
+    .blog-content {
+        min-height: 200px
+    }
+
+</style>
+<!-- /.blog-post -->
+<div class="blog-post">
+    <h2 class="blog-post-title text-center">{{result.headline}}</h2>
+    <p class="blog-post-meta text-center">{{result.createtime}} by <a href="#">Binyu</a></p>
+    <div class="blog-content">{{result.content | safe}}</div>
+
+</div>
+
+<div class="col-12 article-comment" id="commenttop">
+    <div class="col-12 row add-comment ">
+        <div class="col-sm-2 col-12">
+            <label for="tempname">你的昵称：</label>
+        </div>
+        <div class="col-sm-10 col-12" style="padding: 0 0 0 10px;">
+            <input type="text" class="form-control" id="tempname" placeholder="请输入你的昵称">
+        </div>
+    </div>
+    <div class="col-12 row">
+        <div class="col-sm-2 col-12">
+            <label for="comment">你的评论：</label>
+        </div>
+        <div class="col-sm-10 col-12" style="padding: 0 0 0 10px;">
+            <textarea id="comment" class="form-control" placeholder="Any discussion are welcome!"
+                      style="height: 100px;"></textarea>
+        </div>
+    </div>
+    <div class="col-12 row">
+        <div class="col-2"></div>
+        <div class="row">
+            <div class="col-6" style="text-align: left; color: #888888;">欢迎技术探讨</div>
+            <div class="col-6" style="text-align: right">
+                <p></p>
+                <button type="button" class="btn light-btn" style=" border: solid 1px #a4a0a8"
+                        onclick="addComment('{{result.articleid}}')" id="submitBtn">
+                    提交评论
+                </button>
+                <button type="button" style="display: none " id="replyBtn" class="btn light-btn"
+                        onclick="replyComment('{{result.articleid}}')">回复评论
+                </button>
+            </div>
+        </div>
+    </div>
+    <div id="commentDiv">
+        <!-- 循环遍历评论，这部分代码保持不变 -->
+        {% for comment in comment_user %}
+        <div class="col-12 list row">
+            <div class="col-2 icon">
+                <!--                <img src="/avatar/13.png" class="img-fluid" style="width: 70px;">-->
+            </div>
+            <div class="col-10 comment">
+                <div class="col-12 row">
+                    <div class="col-7 commenter">{{comment.tempname}}&nbsp;&nbsp;&nbsp;{{comment.createtime}}</div>
+                    <div class="col-5 reply">
+                        <!-- 文章作者、管理员和评论者只能回复和隐藏，不能点赞-->
+                        {% if session.get('userid') != None %}
+                        <label onclick="hideComment('{{comment.commentid}}')">
+                            <span class="oi oi-arrow-circle-right" aria-hidden="true"></span>隐藏
+                        </label>&nbsp;&nbsp;&nbsp;
+                        {% endif %}
+                        <label onclick="gotoReply('{{comment.commentid}}')">
+                            <span class="oi oi-arrow-circle-right" aria-hidden="true"></span>回复
+                        </label>&nbsp;&nbsp;&nbsp;
+                        <label onclick="agreeComment(this, '{{comment.commentid}}')">
+                            <span class="oi oi-chevron-bottom" aria-hidden="true"></span> 赞成 (<span>1</span>)
+                        </label>&nbsp;&nbsp;&nbsp;
+                        <label onclick="opposeComment(this, '{{comment.commentid}}')">
+                            <span class="oi oi-x" aria-hidden="true"></span> 反对 (<span>0</span>)
+                        </label>
+                    </div>
+                </div>
+                <div class="col-12 content">
+                    {{comment.content}}
+                </div>
+            </div>
+        </div>
+        {% if comment['reply_list'] %}
+        {% for reply in comment['reply_list'] %}
+        <div class="col-12 list row">
+            <div class="col-2 icon">
+            </div>
+            <div class="col-10 comment" style="border: solid 1px #cccccc">
+                <div class="col-12 row" style="padding-left:  25px">
+                    <div class="col-7 commenter">{{reply.tempname}}&nbsp;&nbsp;回复{{comment.tempname}}&nbsp;&nbsp;{{reply.createtime}}</div>
+                    <div class="col-5 reply">
+                    </div>
+                </div>
+                <div class="col-12 content" style="padding-left: 25px">
+                    {{reply.content}}
+                </div>
+            </div>
+        </div>
+
+        {%endfor %}
+        {%endif%}
+        {% endfor %}
+    </div>
+</div>
+
+
+<script>
+    function addComment(articleid) {
+        var tempname = $.trim($("#tempname").val());
+        var content = $.trim($("#comment").val());
+        if (content.length < 5 || content.length > 1000) {
+            alert("评论内容在5-1000字之间.");
+            return false;
+        }
+        var param = 'articleid=' + articleid + '&content=' + content + '&tempname=' + tempname;
+        $.post('/comment', param, function (data) {
+            if (data == 'content-invalid') {
+                alert("评论内容在5-1000字之间.");
+            } else if (data == 'add-limit') {
+                alert("你当天已经用完2条评论的限额.");
+            } else if (data == 'add-pass') {
+                location.reload();
+            }
+            //这里还需要优化
+            else if (data == 'not-login') {
+                alert("你还没有登录，不能发表评论.");
+            } else {
+                alert("发表评论出错，请联系管理员.");
+            }
+        });
+    }
+
+    var COMMENTID = 0;
+
+    function gotoReply(commentid) {
+        $("#replyBtn").show();
+        $("#submitBtn").hide();
+        $('#content').val('请再次回复编号为' + commentid + '的评论');
+        $("#comment").focus();
+        COMMENTID = commentid;
+    }
+
+    function replyComment(articleid) {
+        var content = $.trim($("#comment").val());
+        var tempname = $.trim($("#tempname").val());
+        if (content.length < 5 || content.length > 1000) {
+            alert("评论内容在5-1000字之间.");
+            return false;
+        }
+        var param = 'articleid=' + articleid;
+        param += '&content=' + content;
+        param += '&commentid=' + COMMENTID;
+        param += '&tempname=' + tempname;
+        $.post('/reply', param, function (data) {
+            if (data == 'content-invalid') {
+                alert("评论内容在5-1000字之间.");
+            } else if (data == 'reply-limit') {
+                alert("当天已用完2条评论的限额.");
+            } else if (data == 'reply-pass') {
+                location.reload();
+            } else if (data == 'reply-fail') {
+                alert("回复评论出错，请联系管理员.");
+            }
+        });
+    }
+
+</script>
+{% endblock %}

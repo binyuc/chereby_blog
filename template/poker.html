@@ -1,0 +1,348 @@
+<!--将当前页面继承到block位置-->
+{% extends 'base.html' %}
+{% block content %}
+<link href="/css/dropdown.css" rel="stylesheet" type="text/css">
+<script src="/js/poker.js"></script>
+<script src="/icon_font/iconfont.js"></script>
+<style>
+    .icon {
+        width: 1em;
+        height: 1em;
+        vertical-align: -0.15em;
+        fill: currentColor;
+        overflow: hidden;
+    }
+
+    .yahei {
+        font-family: '微软雅黑'
+    }
+</style>
+
+<div class="blog-post-title text-center yahei">德州扑克胜率计算器</div>
+<p class="blog-post-meta text-center">2022-05-15 by <a href="#">Binyu</a></p>
+
+<div class="container py-3">
+    <main>
+        <div class="row row-cols-1 row-cols-md-5  text-center">
+            <div class="col">
+                <div class="card mb-4 rounded-3 shadow-sm">
+                    <div class="card-header ">
+                        <h4 class="my-0 fw-normal yahei">Flop 翻牌</h4>
+                    </div>
+                    <div class="col-sm-12">
+                        <label class="form-label">花色</label>
+                        <select class="form-select" id="card_color_flop1" onBlur="poker_check_valid_color()"
+                                oninput="poker_check_valid_color()">
+                            <option value="none">Choose...</option>
+                            <option value="H" selected>红桃</option>
+                            <option value="S">黑桃</option>
+                            <option value="D">方片</option>
+                            <option value="C">梅花</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-12">
+                        <label class="form-label">牌面</label>
+                        <select class="form-select" id="card_num_flop1" onBlur="check_direction()"
+                                oninput="check_direction()">
+                            <option value="none">Choose...</option>
+                            <option selected>A</option>
+                            <option>K</option>
+                            <option>Q</option>
+                            <option>J</option>
+                            <option>T</option>
+                            <option>9</option>
+                            <option>8</option>
+                            <option>7</option>
+                            <option>6</option>
+                            <option>5</option>
+                            <option>4</option>
+                            <option>3</option>
+                            <option>2</option>
+                        </select>
+                        <div style="padding-bottom: 10px;"></div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col">
+                <div class="card mb-4 rounded-3 shadow-sm">
+                    <div class="card-header ">
+                        <h4 class="my-0 fw-normal yahei">Flop 翻牌</h4>
+                    </div>
+                    <div class="col-sm-12">
+                        <label class="form-label">花色</label>
+                        <select class="form-select" id="card_color_flop2" onBlur="poker_check_valid_color()"
+                                oninput="poker_check_valid_color()">
+                            <option value="none">Choose...</option>
+                            <option value="H">红桃</option>
+                            <option value="S">黑桃</option>
+                            <option value="D">方片</option>
+                            <option value="C" selected>梅花</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-12">
+                        <label class="form-label">牌面</label>
+                        <select class="form-select" id="card_num_flop2" onBlur="check_direction()"
+                                oninput="check_direction()">
+                            <option value="none">Choose...</option>
+                            <option>A</option>
+                            <option>K</option>
+                            <option selected>Q</option>
+                            <option>J</option>
+                            <option>T</option>
+                            <option>9</option>
+                            <option>8</option>
+                            <option>7</option>
+                            <option>6</option>
+                            <option>5</option>
+                            <option>4</option>
+                            <option>3</option>
+                            <option>2</option>
+                        </select>
+                        <div style="padding-bottom: 10px;"></div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col">
+                <div class="card mb-4 rounded-3 shadow-sm">
+                    <div class="card-header ">
+                        <h4 class="my-0 fw-normal yahei">Flop 翻牌</h4>
+                    </div>
+                    <div class="col-sm-12">
+                        <label class="form-label">花色</label>
+                        <select class="form-select" id="card_color_flop3" onBlur="poker_check_valid_color()"
+                                oninput="poker_check_valid_color()">
+                            <option value="none">Choose...</option>
+                            <option value="H">红桃</option>
+                            <option value="S" selected>黑桃</option>
+                            <option value="D">方片</option>
+                            <option value="C">梅花</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-12">
+                        <label class="form-label">牌面</label>
+                        <select class="form-select" id="card_num_flop3" onBlur="check_direction()"
+                                oninput="check_direction()">
+                            <option value="none">Choose...</option>
+                            <option>A</option>
+                            <option selected>K</option>
+                            <option>Q</option>
+                            <option>J</option>
+                            <option>T</option>
+                            <option>9</option>
+                            <option>8</option>
+                            <option>7</option>
+                            <option>6</option>
+                            <option>5</option>
+                            <option>4</option>
+                            <option>3</option>
+                            <option>2</option>
+                        </select>
+                        <div style="padding-bottom: 10px;"></div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col">
+                <div class="card mb-4 rounded-3 shadow-sm">
+                    <div class="card-header">
+                        <h4 class="my-0 fw-normal yahei">Turn 转牌</h4>
+                    </div>
+                    <div class="col-sm-12">
+                        <label class="form-label">花色</label>
+                        <select class="form-select" id="card_color_flop4">
+                            <option value="none">None...</option>
+                            <option value="H">红桃</option>
+                            <option value="S">黑桃</option>
+                            <option value="D" selected>方片</option>
+                            <option value="C">梅花</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-12">
+                        <label class="form-label">牌面</label>
+                        <select class="form-select" id="card_num_flop4" onBlur="check_direction()"
+                                oninput="check_direction()">
+                            <option value="none">Choose...</option>
+                            <option>A</option>
+                            <option>K</option>
+                            <option>Q</option>
+                            <option>J</option>
+                            <option>T</option>
+                            <option>9</option>
+                            <option>8</option>
+                            <option>7</option>
+                            <option>6</option>
+                            <option selected>5</option>
+                            <option>4</option>
+                            <option>3</option>
+                            <option>2</option>
+                        </select>
+                        <div style="padding-bottom: 10px;"></div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col">
+                <div class="card mb-4 rounded-3 shadow-sm">
+                    <div class="card-header">
+                        <h4 class="my-0 fw-normal yahei">River 河牌</h4>
+                    </div>
+                    <div class="col-sm-12">
+                        <label class="form-label">花色</label>
+                        <select class="form-select" id="card_color_flop5">
+                            <option selected value="none">None...</option>
+                            <option value="H">红桃</option>
+                            <option value="S">黑桃</option>
+                            <option value="D">方片</option>
+                            <option value="C">梅花</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-12">
+                        <label class="form-label">牌面</label>
+                        <select class="form-select" id="card_num_flop5" onBlur="check_direction()"
+                                oninput="check_direction()">
+                            <option selected value="none">Choose...</option>
+                            <option>A</option>
+                            <option>K</option>
+                            <option>Q</option>
+                            <option>J</option>
+                            <option>T</option>
+                            <option>9</option>
+                            <option>8</option>
+                            <option>7</option>
+                            <option>6</option>
+                            <option>5</option>
+                            <option>4</option>
+                            <option>3</option>
+                            <option>2</option>
+                        </select>
+                        <div style="padding-bottom: 10px;"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row row-cols-1 row-cols-md-5  text-center">
+            <div class="col">
+                <div class="card mb-4 rounded-3 shadow-sm">
+                    <div class="card-header">
+                        <h4 class="my-0 fw-normal yahei">我的手牌1</h4>
+                    </div>
+                    <div class="col-sm-12">
+                        <label class="form-label">花色</label>
+                        <select class="form-select" id="card_color_my_hand1">
+                            <option value="none">None...</option>
+                            <option value="H">红桃</option>
+                            <option value="S">黑桃</option>
+                            <option value="D" selected>方片</option>
+                            <option value="C">梅花</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-12">
+                        <label class="form-label">牌面</label>
+                        <select class="form-select" id="card_num_my_hand1" onBlur="check_direction()"
+                                oninput="check_direction()">
+                            <option value="none">Choose...</option>
+                            <option>A</option>
+                            <option>K</option>
+                            <option>Q</option>
+                            <option selected>J</option>
+                            <option>T</option>
+                            <option>9</option>
+                            <option>8</option>
+                            <option>7</option>
+                            <option>6</option>
+                            <option>5</option>
+                            <option>4</option>
+                            <option>3</option>
+                            <option>2</option>
+                        </select>
+                        <div style="padding-bottom: 10px;"></div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col">
+                <div class="card mb-4 rounded-3 shadow-sm">
+                    <div class="card-header ">
+                        <h4 class="my-0 fw-normal yahei">我的手牌2</h4>
+                    </div>
+                    <div class="col-sm-12">
+                        <label class="form-label">花色</label>
+                        <select class="form-select" id="card_color_my_hand2">
+                            <option value="none">None...</option>
+                            <option value="H">红桃</option>
+                            <option value="S">黑桃</option>
+                            <option value="D" selected>方片</option>
+                            <option value="C">梅花</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-12">
+                        <label class="form-label">牌面</label>
+                        <select class="form-select" id="card_num_my_hand2" onBlur="check_direction()"
+                                oninput="check_direction()">
+                            <option value="none">Choose...</option>
+                            <option>A</option>
+                            <option>K</option>
+                            <option selected>Q</option>
+                            <option>J</option>
+                            <option>T</option>
+                            <option>9</option>
+                            <option>8</option>
+                            <option>7</option>
+                            <option>6</option>
+                            <option>5</option>
+                            <option>4</option>
+                            <option>3</option>
+                            <option>2</option>
+                        </select>
+                        <div style="padding-bottom: 10px;"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <button class="w-25 btn btn-primary btn-lg" type="button" id="poker_button" onclick="analyze_card()">胜率计算
+        </button>
+        <h4 class="text-center yahei" style="padding-bottom: 10px; padding-top: 30px">德州扑克胜率算法结果</h4>
+        <div class="progress">
+            <div class="progress-bar" role="progressbar" aria-valuenow="1" aria-valuemin="0" aria-valuemax="100"
+                 style="width: 10%">0.00%
+            </div>
+        </div>
+        <ul class="list-group mb-3" style="margin: 10px 0  !important;">
+            <li class="list-group-item  justify-content-between ">
+                <div>
+                    <h6 class="text-success">计算耗时</h6>
+                    <small class="text-muted" id="time_diff"></small>
+                </div>
+            </li>
+            <li class="list-group-item  justify-content-between ">
+                <div>
+                    <h6 class="text-success">整体胜率情况</h6>
+                    <small class="text-muted" id="overall_res"></small>
+                </div>
+            </li>
+            <div></div>
+            <li class="list-group-item  justify-content-between ">
+                <div>
+                    <h6 class="text-success">我的牌型概率</h6>
+                    <small class="text-muted" id="my_res"></small>
+                </div>
+            </li>
+            <div></div>
+            <li class="list-group-item  justify-content-between ">
+                <div>
+                    <h6 class="text-success">对手的牌型概率</h6>
+                    <small class="text-muted" id="enemy_res"></small>
+                </div>
+            </li>
+        </ul>
+    </main>
+
+</div>
+
+
+{% endblock %}

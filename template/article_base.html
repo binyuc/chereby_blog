@@ -1,0 +1,70 @@
+<!--将当前页面继承到block位置-->
+{% extends 'base.html' %}
+{% block content %}
+<div class="row blog-list">
+    <!-- /.博客主体 -->
+    <hr>
+    <div class="col-md-9 blog-main">
+        {%block article%}
+        {% endblock %}
+    <hr>
+        <div>
+
+        </div>
+
+    </div>
+
+    <aside class="col-md-3 blog-sidebar">
+        <div class="sticky-top p-4 mb-3  bg-light rounded">
+            <h4 class="font-italic">文章分类</h4>
+            <ul class="list-unstyled ps-0">
+                {%for cat in type_count%}
+                {% for k, v in article_type.items()%}
+                {% if cat[0] == k| int %}
+                <li class="mb-1">
+                    <button class="btn btn-toggle align-items-center rounded" data-bs-toggle="collapse"
+                            data-bs-target="#{{v}}" aria-expanded="true"><a href="/article_list/type={{k}}&page=1"></a>
+                        {{v}}
+                    </button>
+                    <a href="/article_list/type={{k}}&page=1"><span class="badge badge-success badge-pill ">{{cat[1]}}</span></a>
+                    <div class="collapse" id="{{v}}">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            {%for type,subtype in subtype_count.items()%}
+                            {% if type == cat[0] | string %}
+                            {%for sub in subtype %}
+                            {%for ik,iv in sub.items() %}
+                            <li>
+                                <a href="/article_list/type={{k}}&page=1&subtype={{ik}}" class="link-dark rounded">{{ik}}</a>
+                                <span class="badge badge-success badge-pill">{{iv}}</span>
+                                {% endfor %}
+                                {%endfor %}
+                                {% endif %}
+                                {% endfor %}
+                            </li>
+                        </ul>
+                    </div>
+                    {% endif%}
+                    {% endfor %}
+                    {% endfor %}
+                </li>
+
+                <li class="border-top my-3"></li>
+                <li class="mb-1">
+                    <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
+                            data-bs-target="#account-collapse" aria-expanded="false">
+                        有趣的东西
+                    </button>
+                    <div class="collapse" id="account-collapse">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li><a href="http://cov.chereby.com/cov" class="link-dark rounded">疫情大屏监控</a></li>
+                            <li><a href="/anjuke" class="link-dark rounded">二手房预测模型与可视化</a></li>
+                            <li><a href="/admin" class="link-dark rounded">后台管理</a></li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+
+        </div>
+    </aside>
+</div>
+{% endblock %}

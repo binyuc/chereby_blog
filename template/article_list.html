@@ -1,0 +1,68 @@
+<!--将当前页面继承到block位置-->
+{% extends 'article_base.html' %}
+{% block article %}
+
+<div class="row mb-2" style="padding: 5px 15px">
+    <!--    卡片开始-->
+    {% for article in result %}
+    <div class="blog-card-div col-md-12" data-aos="fade-down"
+         data-aos-easing="linear"
+         data-aos-duration="6000">
+        <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+            <div class="col p-4 d-flex flex-column position-static">
+                <div style="padding: 5px 5px ">
+                    <strong class="d-inline-block mb-2 text-primary"
+                            style="padding: 0 0">{{article_type[article.type | string]}}</strong>
+                </div>
+                <div style="height: 10%">
+                    <h3 class="mb-0" style="font-size: 20px">{{article.headline}}</h3>
+                    <div class="mb-1 text-muted"
+                         style=" font-size:15px; align-content: center; padding-top: 5px">
+                        {{article.createtime}}
+                    </div>
+                </div>
+                <div class="row d-flex" style="height: 10%">
+                    <!--                                <div class="col-7 mb-1 text-muted" style=" font-size:15px; align-content: center">{{article.createtime}}</div>-->
+                    <div class="col-12 mb-1 text-muted" style=" text-align:right; padding-top: 5px">
+                        <i class="bi bi-chat-square-text" style="padding-right: 5px; padding-top: 5px">
+                            <span style="padding-left: 3px">{{article.replycount}}</span></i>
+                        <i class="bi bi-thermometer-half" style="padding-right: 5px; padding-top: 5px"><span
+                                style="padding-left: 3px">{{article.readcount}}</span></i>
+                    </div>
+                </div>
+                <div style="height: 40%; padding-top: 15px">
+                    <p class="card-text" style="align-content: flex-start">{{article.content | striptags |
+                        mytruncate(40)}}</p>
+                </div>
+                <div>
+                    <a href="/article/articleid={{article.articleid}}" class="stretched-link">继续阅读</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<!--上一页下一页导航栏-->
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-end">
+        <li class="page-item">
+            {% if page ==1 %}
+            <a class="page-link" href="/article_list/type={{type}}&page=1" tabindex="-1" aria-disabled="true">Previous</a>
+            {% else %}
+            <a class="page-link" href="/article_list/type={{type}}&page=1" tabindex="-1"
+               aria-disabled="true">Previous</a>
+            {% endif %}
+        </li>
+        {% for i in range(total) %}
+        <li class="page-item"><a class="page-link" href="/article_list/type={{type}}&page={{i+1}}">{{i+1}}</a></li>
+        {% endfor %}
+        <li class="page-item">
+            {% if page ==total%}
+            <a class="page-link" href="/article_list/type={{type}}&page={{total}}">Next</a>
+            {% else %}
+            <a class="page-link" href="/article_list/type={{type}}&page={{page +1 }}">Next</a>
+            {% endif %}
+        </li>
+    </ul>
+</nav>
+{% endblock %}
